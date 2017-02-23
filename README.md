@@ -9,7 +9,45 @@ Technologies covered
 
 ## Javascript
  
-- [What all design patterns do you know? Which should be used at what instance?!](#design-patterns)
+- [What all design patterns do you know? Which should be used at what instance?](#design-patterns)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ### Design Patterns
