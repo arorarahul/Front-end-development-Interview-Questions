@@ -8,5 +8,9 @@ Technologies covered
 - CSS
 
 ## Javascript
+ 
+- [What all design patterns do you know? Which should be used at what instance?!](#design-patterns)
 
-### 1. What all design patterns do you know? Which should be used at what instance?
+
+### Design Patterns
+
