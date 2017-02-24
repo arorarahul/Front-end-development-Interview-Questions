@@ -21,7 +21,7 @@ Technologies covered
 - Observer
 - Singleton
 
-#### Module
+### Module
 
 *Advantages*:
 
@@ -161,7 +161,7 @@ console.log(Module.publicMethod('hello'));
 Adding an `_` infront of a method name is a good practice to distinguish a private method from a public method
 
 
-#### Prototype
+### Prototype
 
 *Advantages*:
 
