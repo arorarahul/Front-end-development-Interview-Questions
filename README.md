@@ -18,6 +18,7 @@ References:
 - [What all design patterns do you know? Which one should be used at what instance?](#design-patterns)
 - [What are promises?](#promises)
 - [How will you handle a task that is to be done after successful completion of multiple asynchronous calls?](#multiple-async-call-handling-using-promises)
+- [List all the advantages and disadvantages you know of using strict mode in javascript](#use-strict)
 
 
 ## Design Patterns
@@ -495,11 +496,11 @@ Benefit of using promises:
 - [Reference2](https://github.com/kriskowal/q)
 - [Reference3](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all)
 
-This is done using .all() method in both AngularJS provided $q service and Promise API by javascript
+This is done using `.all()` method in both AngularJS provided `$q` service and `Promise API` by javascript.
 
-Promise.all  that resolves when all of the promises in the given iterable have resolved, or rejects if any of the promises rejects. 
+`Promise.all()` that resolves when all of the promises in the given iterable have resolved, or rejects if any of the promises rejects. 
 
-If any of the passed in promises rejects, the all Promise immediately rejects with the value of the promise that rejected, ignoring all the other promises whether or not they have resolved. If an empty array is passed, then this method resolves immediately. If the returned promise fulfills, it is fulfilled with an array of the values from the fulfilled promises in the same order as defined in the iterable. If the returned promise rejects, it is rejected with the reason from the first promise in the iterable that rejected. This method can be useful for aggregating results of multiple promises.
+If any of the passed in promises rejects, the `.all()` Promise immediately rejects with the value of the promise that rejected, ignoring all the other promises whether or not they have resolved. If an empty array is passed, then this method resolves immediately. If the returned promise fulfills, it is fulfilled with an array of the values from the fulfilled promises in the same order as defined in the iterable. If the returned promise rejects, it is rejected with the reason from the first promise in the iterable that rejected. This method can be useful for aggregating results of multiple promises.
 
 ### Note:
 
@@ -643,6 +644,9 @@ p1.then(function(response){
     console.log("not fired due to the catch statement");
 })
 ```
+
+## Use Strict
+
 
 
 
