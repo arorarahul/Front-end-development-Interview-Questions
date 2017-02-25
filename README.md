@@ -19,6 +19,7 @@ References:
 - [What are promises?](#promises)
 - [How will you handle a task that is to be done after successful completion of multiple asynchronous calls?](#multiple-async-call-handling-using-promises)
 - [List all the advantages and disadvantages you know of using strict mode in javascript.](#use-strict)
+- [What is the application of closures? Why use them over normal functions?](#javascript closures)
 
 
 ## Design Patterns
@@ -719,5 +720,9 @@ Strict mode simplifies how variable names map to particular variable definitions
 ### Future versions:
 
  in strict mode a short list of identifiers become reserved keywords. These words are implements, interface, let, package, private, protected, public, static, and yield. In strict mode, then, you can't name or use variables or arguments with these names.
+
+
+
+## Javascript Closures
 
 
