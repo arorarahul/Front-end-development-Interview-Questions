@@ -490,5 +490,10 @@ Benefit of using promises:
 
 ## Multiple Async Call Handling Using Promises
 
+- [Reference1](http://chariotsolutions.com/blog/post/angularjs-corner-using-promises-q-handle-asynchronous-calls/)
+
+- [Reference2](https://github.com/kriskowal/q)
+- [Reference3](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all)
+
 
 
