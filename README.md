@@ -19,7 +19,8 @@ References:
 - [What are promises?](#promises)
 - [How will you handle a task that is to be done after successful completion of multiple asynchronous calls?](#multiple-async-call-handling-using-promises)
 - [List all the advantages and disadvantages you know of using strict mode in javascript.](#use-strict)
-- [What is the application of closures? Why use them over normal functions?](#javascript closures)
+- [What is the application of closures? Why use them over normal functions?](#javascript-closures)
+- [Make a simple counter using a single function and a local variable using closures](#simple-counter-function)
 
 
 ## Design Patterns
@@ -725,4 +726,81 @@ Strict mode simplifies how variable names map to particular variable definitions
 
 ## Javascript Closures
 
+- [Reference1](https://developer.mozilla.org/en/docs/Web/JavaScript/Closures)
+- [Reference2](http://javascriptissexy.com/understand-javascript-closures-with-ease/)
+- [Reference3](http://stackoverflow.com/questions/12930272/javascript-closures-vs-anonymous-functions)
+- [Reference4](http://stackoverflow.com/questions/2728278/what-is-a-practical-use-for-a-closure-in-javascript)
+- [Reference5](https://javascriptweblog.wordpress.com/2010/10/25/understanding-javascript-closures/)
 
+A closure is the combination of the inner function returned by the outer executed function which has popped of from the stack and the variable that was declared local to the outer executing function which is still in memory after the outer function popped of from the stack. Therefore that variable can be accessed in the inner function that is returned.
+
+### Application of using closures
+
+Consequently, you can use a closure anywhere that you might normally use an object with only a single method.
+
+- Closures are used to make function factories
+- Closures are used in Module design pattern in javascript (emulating private methods with closures)
+- All javascript events uses closures
+
+## Disadvantages of using closures
+
+It is unwise to unnecessarily create functions within other functions if closures are not needed for a particular task, as it will negatively affect script performance both in terms of processing speed and memory consumption.
+For instance, when creating a new object/class, methods should normally be associated to the object's prototype rather than defined into the object constructor. The reason is that whenever the constructor is called, the methods would get reassigned (that is, for every object creation).
+
+
+### Popular examples of closures found all over the web
+
+Starting with very popular example
+
+```JS
+for (var i = 0; i < 10; i++) {
+	
+	setTimeout(function() {
+		console.log(a)
+	}, i * 1000); //prints 10, 10 times
+	
+}
+
+//fix for this
+for (var i = 0; i < 10; i++) {
+	(function(a) {
+		setTimeout(function() {
+			console.log(a) //prints 0 to 9 after 1 second each
+		}, i * 1000)
+	})(i);
+}
+
+
+```
+Simple example of a function factory using closure
+
+```JS
+function makeAdder(x) {
+  return function(y) {
+    return x + y;
+  };
+}
+
+var add5 = makeAdder(5);
+var add10 = makeAdder(10);
+
+console.log(add5(2));  // 7
+console.log(add10(2)); // 12
+```
+
+
+## Simple Counter Function
+
+```JS
+var counter = (function(){
+	var i = 0;
+	return function(){
+		console.log(++i); //1 2 and so on
+	}
+
+})();
+
+counter();
+counter();
+
+```
