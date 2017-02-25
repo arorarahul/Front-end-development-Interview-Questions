@@ -15,7 +15,7 @@ References:
 
 ## Javascript
  
-- [What all design patterns do you know? Which should be used at what instance?](#design-patterns)
+- [What all design patterns do you know? Which one should be used at what instance?](#design-patterns)
 - [What are promises?](#promises)
 - [How will you handle a task that is to be done after successful completion of multiple asynchronous calls?](#multiple-async-call-handling-using-promises)
 
@@ -494,6 +494,155 @@ Benefit of using promises:
 
 - [Reference2](https://github.com/kriskowal/q)
 - [Reference3](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all)
+
+This is done using .all() method in both AngularJS provided $q service and Promise API by javascript
+
+Promise.all  that resolves when all of the promises in the given iterable have resolved, or rejects if any of the promises rejects. 
+
+If any of the passed in promises rejects, the all Promise immediately rejects with the value of the promise that rejected, ignoring all the other promises whether or not they have resolved. If an empty array is passed, then this method resolves immediately. If the returned promise fulfills, it is fulfilled with an array of the values from the fulfilled promises in the same order as defined in the iterable. If the returned promise rejects, it is rejected with the reason from the first promise in the iterable that rejected. This method can be useful for aggregating results of multiple promises.
+
+### Note:
+
+There is another function `.race()` which takes in an array only. It resolved whenever any one of the promises passed to it is resolved.
+
+- [Reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/race)
+
+Angular way:
+
+```JS
+angular.module("myApp",[])
+.controller("myController",function($scope, myService){
+
+    var urls = [
+        "data0.json",
+        "data1.json",
+        "data2.json"
+    ]
+
+    myService.handleMultipleCalls(urls).then(function(response){
+        console.log(response); //will return an array of responses
+    }, function(error){
+        console.log(error);
+    });
+    
+})
+.service("myService",function($http, $q){
+
+    this.handleMultipleCalls = function(urls){
+
+        var data = [];
+        var deferred = $q.defer();
+        angular.forEach(urls, function(url){
+            data.push($http.get(url));
+        });
+
+        $q.all(data).then(function(response){
+           deferred.resolve(response);
+        }, function(error){
+            deferred.reject(error);
+        })
+
+        return deferred.promise
+
+    };
+
+});
+```
+
+Javascript Way:
+
+```JS
+function getDataFromMultiple(urls, createXMLRequest){
+
+    var data = []
+
+    urls.forEach(function(url){
+        data.push(
+            createXMLRequest(url)
+        ) 
+    });
+
+    // console.log(data);
+
+    Promise.all(data).then(function(response){
+        console.log(response);
+    }, function(error){
+        console.log(error);
+    })
+
+}
+
+var urls = [
+        "data0.json",
+        "data1.json",
+        "data2.json"
+    ];
+
+getDataFromMultiple(urls, function(url){
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET",url,true);
+    xhttp.send();
+
+    return xhttp;
+});
+```
+
+Fail fast approach in Promise.all.
+Source: MDN
+
+```JS
+var p1 = new Promise((resolve, reject) => { 
+  setTimeout(resolve, 1000, 'one'); 
+}); 
+var p2 = new Promise((resolve, reject) => { 
+  setTimeout(resolve, 2000, 'two'); 
+});
+var p3 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 3000, 'three');
+});
+var p4 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 4000, 'four');
+});
+var p5 = new Promise((resolve, reject) => {
+  reject('reject'); //this promise rejects immediately so promise overall is reject immediately
+});
+
+Promise.all([p1, p2, p3, p4, p5]).then(values => { 
+  console.log(values);
+}, reason => {
+  console.log(reason)
+});
+
+//From console:
+//"reject"
+
+//It's even possible to use .catch
+Promise.all([p1, p2, p3, p4, p5]).then(values => { 
+  console.log(values);
+}).catch(reason => { 
+  console.log(reason)
+});
+```
+Another simple example
+
+```JS
+var p1 = new Promise(function(resolve, reject){
+
+    resolve("resolved");
+
+});
+
+p1.then(function(response){
+    console.log(response);
+    throw 'Oh no!'; //return Promise.reject('Oh no!') could also be used instead of throw here
+}).catch(function(e){
+    console.log(e);
+}).then(function(){
+    console.log("after the catch the chain is restored");
+}, function(){
+    console.log("not fired due to the catch statement");
+})
+```
 
 
 
