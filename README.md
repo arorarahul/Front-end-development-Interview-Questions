@@ -12,14 +12,12 @@ References:
 - My personal experience
 - [Reference1](https://github.com/h5bp/Front-end-Developer-Interview-Questions)
 - [Reference2](https://www.codementor.io/angularjs/tutorial/angularjs-interview-questions-sample-answers)
-- [Reference3]()
-
 
 ## Javascript
  
 - [What all design patterns do you know? Which should be used at what instance?](#design-patterns)
 - [What are promises?](#promises)
-- [How will you handle a task that is to be done after successful completion of multiple asynchronous calls?](#design-patterns)
+- [How will you handle a task that is to be done after successful completion of multiple asynchronous calls?](#multiple-async-call-handling-using-promises)
 
 
 ## Design Patterns
@@ -322,6 +320,7 @@ Singleton only allows for single instantiation of the same object.
 - [Reference1](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 - [Reference2](http://www.mattgreer.org/articles/promises-in-wicked-detail/#why-)
 - [Reference3](https://github.com/kriskowal/q)
+- [Reference4](http://chariotsolutions.com/blog/post/angularjs-corner-using-promises-q-handle-asynchronous-calls/)
 
 A promise is a value which may be available now, or in future or never when handling async operations
 
@@ -455,6 +454,41 @@ angular.module("myApp",[])
 
 });
 ```
+
+The above can also be written without promises or deferred object by simple returning $http as:
+
+```JS
+angular.module("myApp",[])
+.controller("myController",function($scope, myService){
+
+    myService.getData().then(function(response){
+        console.log(response);
+    });
+    
+})
+.service("myService",function($http, $q){
+
+    this.getData = function(){
+
+        return $http.get('data.json').then(function(response){
+            return response.data;
+        }, function(error){
+            return error;
+        })  
+
+    };
+
+});
+```
+
+Benefit of using promises:
+
+1) Allows for proper handling of async calls where you can 
+2) Allows you to handle multiple, nested async calls efficiently
+3) Provides more usable methods to handle javascript functionality in case of async calls
+
+
+## Multiple Async Call Handling Using Promises
 
 
 
