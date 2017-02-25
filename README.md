@@ -21,7 +21,7 @@ References:
 - [List all the advantages and disadvantages you know of using strict mode in javascript.](#use-strict)
 - [What is the application of closures? Why use them over normal functions?](#javascript-closures)
 - [Make a simple counter using a single function and a local variable using closures](#simple-counter-function)
-
+- [Devise a solution in which an object can be made using a constructor function without adding `new` when calling the constructor function and assigning to the object?](#making-objects-using-constructor-function-without-newing)
 
 ## Design Patterns
 
@@ -803,4 +803,28 @@ var counter = (function(){
 counter();
 counter();
 
+```
+
+## Making Objects Using Constructor Function Without Newing
+
+```JS
+function Person(){
+
+	if(this instanceof Person){
+		this.firstname = "rahul";
+		this.lastname = "arora";
+	}else{
+		return new Person();
+	}
+
+	
+}
+
+var a = new Person();
+
+console.log(a);
+
+var b = Person();
+
+console.log(b);
 ```
