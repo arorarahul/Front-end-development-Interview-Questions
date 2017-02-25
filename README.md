@@ -22,7 +22,7 @@ References:
 - [How will you handle a task that is to be done after successful completion of multiple asynchronous calls?](#design-patterns)
 
 
-### Design Patterns
+## Design Patterns
 
 - Module
 - Prototype
@@ -30,12 +30,10 @@ References:
 - Singleton
 
 
-#### Module Design Pattern
+### Module Design Pattern
 
 - [Reference1](https://scotch.io/bar-talk/4-javascript-design-patterns-you-should-know)
 - [Reference2](https://toddmotto.com/mastering-the-module-pattern/)
-
-### Module
 
 *Advantages*:
 
@@ -134,7 +132,7 @@ var Module = (function(){
 Module.publickMethod('Hello');
 ```
 
-#### Augmenting Modules
+### Augmenting Modules
 
 What if we wanted to create extensions of our module and wanted to maintain the privacy
 
@@ -175,7 +173,7 @@ console.log(Module.publicMethod('hello'));
 Adding an `_` infront of a method name is a good practice to distinguish a private method from a public method
 
 
-#### Prototype Design Pattern
+### Prototype Design Pattern
 
 - [Reference1](https://scotch.io/bar-talk/4-javascript-design-patterns-you-should-know)
 - [Reference2](https://addyosmani.com/resources/essentialjsdesignpatterns/book/)
@@ -242,7 +240,7 @@ car.init('maruti');
 ```
 
 
-#### Observer Design Pattern
+### Observer Design Pattern
 
 - [Reference1](https://scotch.io/bar-talk/4-javascript-design-patterns-you-should-know)
 - [Reference2](https://addyosmani.com/resources/essentialjsdesignpatterns/book/)
@@ -310,7 +308,7 @@ subject.notifyObserver(observer2); // Observer 2 is notified!
 subject.notifyAllObservers(); 
 ```
 
-#### Singleton Pattern
+### Singleton Pattern
 
 - [Reference1](https://scotch.io/bar-talk/4-javascript-design-patterns-you-should-know)
 - [Reference2](https://addyosmani.com/resources/essentialjsdesignpatterns/book/)
@@ -319,15 +317,15 @@ subject.notifyAllObservers();
 Singleton only allows for single instantiation of the same object.
 
 
-### Promises
+## Promises
 
 - [Reference1](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-- [Reerence2](http://www.mattgreer.org/articles/promises-in-wicked-detail/#why-)
+- [Reference2](http://www.mattgreer.org/articles/promises-in-wicked-detail/#why-)
 - [Reference3](https://github.com/kriskowal/q)
 
 A promise is a value which may be available now, or in future or never when handling async operations
 
-#### Note:
+### Note:
 
 The defer() function was discontinued as the new Promise constructor thing was throw safe. In the Promise constructor if there is an error coming, you can simply handle it unlike in the defer() method where the error is thrown synchronously and you will have to handle the error manually
 
