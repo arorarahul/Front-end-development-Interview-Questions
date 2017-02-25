@@ -29,10 +29,13 @@ References:
 - Observer
 - Singleton
 
+
 #### Module Design Pattern
 
 - [Reference1](https://scotch.io/bar-talk/4-javascript-design-patterns-you-should-know)
 - [Reference2](https://toddmotto.com/mastering-the-module-pattern/)
+
+### Module
 
 *Advantages*:
 
@@ -176,6 +179,7 @@ Adding an `_` infront of a method name is a good practice to distinguish a priva
 
 - [Reference1](https://scotch.io/bar-talk/4-javascript-design-patterns-you-should-know)
 - [Reference2](https://addyosmani.com/resources/essentialjsdesignpatterns/book/)
+### Prototype
 
 *Advantages*:
 
