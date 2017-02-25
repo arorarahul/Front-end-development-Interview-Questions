@@ -18,7 +18,7 @@ References:
 ## Javascript
  
 - [What all design patterns do you know? Which should be used at what instance?](#design-patterns)
-- [What are promises?](#design-patterns)
+- [What are promises?](#promises)
 - [How will you handle a task that is to be done after successful completion of multiple asynchronous calls?](#design-patterns)
 
 
@@ -179,7 +179,6 @@ Adding an `_` infront of a method name is a good practice to distinguish a priva
 
 - [Reference1](https://scotch.io/bar-talk/4-javascript-design-patterns-you-should-know)
 - [Reference2](https://addyosmani.com/resources/essentialjsdesignpatterns/book/)
-### Prototype
 
 *Advantages*:
 
@@ -317,7 +316,147 @@ subject.notifyAllObservers();
 - [Reference2](https://addyosmani.com/resources/essentialjsdesignpatterns/book/)
 - [Reference3](http://robdodson.me/javascript-design-patterns-singleton/)
 
+Singleton only allows for single instantiation of the same object.
 
+
+### Promises
+
+- [Reference1](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+- [Reerence2](http://www.mattgreer.org/articles/promises-in-wicked-detail/#why-)
+- [Reference3](https://github.com/kriskowal/q)
+
+A promise is a value which may be available now, or in future or never when handling async operations
+
+#### Note:
+
+The defer() function was discontinued as the new Promise constructor thing was throw safe. In the Promise constructor if there is an error coming, you can simply handle it unlike in the defer() method where the error is thrown synchronously and you will have to handle the error manually
+
+- [Reference](http://stackoverflow.com/questions/28687566/difference-between-defer-promise-and-promise)
+
+
+```JS
+var a = new Promise(function(resolve, reject){
+
+  var xhttp = new XMLHttpRequest();
+
+  xhttp.onreadystatechange = function(){
+    if(this.readyState == 4 && this.status == 200){
+      resolve(xhttp.responseText);
+    }
+  }
+
+  xhttp.open("GET","data.json", true);
+  xhttp.send();
+
+});
+
+a.then(function(res){
+  console.log(res);
+}).catch(function(err){
+  console.log(err);
+});
+```
+
+### Promises in AngularJS
+
+Writing your own $http, simple example using promises
+
+```JS
+var $http = (function() {
+
+    return {
+        get: function(url) {
+            return new Promise(function(resolve, reject) {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        resolve(xhttp.responseText);
+                    }
+                }
+                xhttp.open('GET', url, true);
+                xhttp.send();
+            });
+        }
+    }
+
+})();
+
+$http.get('data.json').then(function(response) {
+    console.log(response);
+});
+```
+
+### Using the $q service of AngularJS
+
+**This article has been intentionally included here to make a comparison with Promise contructor in javascript and $q service of AngularJS**
+
+```JS
+angular.module("myApp",[])
+.controller("myController",function($scope, myService){
+
+    var p1 = myService.getData();
+
+    p1.then(function(response){
+        console.log(response);
+    }, function(error){
+        console.log(error);
+    })
+
+})
+.service("myService",function($http, $q){
+
+    this.getData = function(){
+
+        return $q(function(resolve, reject){
+
+            $http.get('data.json').then(function(response){
+                resolve(response);
+            }, function(error){
+                reject(response);
+            })  
+
+        });
+
+    };
+
+});
+```
+
+The above code can also be written using deferred:
+
+A new promise instance is created when a deferred instance is created and can be retrieved by calling deferred.promise
+
+```JS
+angular.module("myApp",[])
+.controller("myController",function($scope, myService){
+
+    var p1 = myService.getData();
+    // console.log(p1.$$state);
+    p1.then(function(response){
+        console.log(response);
+    }, function(error){
+        console.log(error);
+    })
+
+})
+.service("myService",function($http, $q){
+
+    var deferred = $q.defer();
+
+    this.getData = function(){
+
+        $http.get('data.json').then(function(response){
+            deferred.resolve(response);
+        }, function(error){
+            deferred.reject(response);
+        })  
+
+        //returning the promise in the end
+        return deferred.promise;
+    };
+
+});
+```
 
 
 
