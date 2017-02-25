@@ -18,7 +18,7 @@ References:
 - [What all design patterns do you know? Which one should be used at what instance?](#design-patterns)
 - [What are promises?](#promises)
 - [How will you handle a task that is to be done after successful completion of multiple asynchronous calls?](#multiple-async-call-handling-using-promises)
-- [List all the advantages and disadvantages you know of using strict mode in javascript](#use-strict)
+- [List all the advantages and disadvantages you know of using strict mode in javascript.](#use-strict)
 
 
 ## Design Patterns
@@ -647,6 +647,77 @@ p1.then(function(response){
 
 ## Use Strict
 
+- [Reference1](http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/)
+- [Reference2](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode)
+- [Reference3](http://cjihrig.com/blog/javascripts-strict-mode-and-why-you-should-use-it/)
 
+Strict Mode is a new feature in ECMAScript 5 that allows you to place a program, or a function, in a "strict" operating context. This strict context prevents certain actions from being taken and throws more exceptions.
+
+Strict mode helps out in a couple ways:
+
+- It catches some common coding bloopers, throwing exceptions.
+- It prevents, or throws errors, when relatively "unsafe" actions are taken (such as gaining access to the global object).
+- It disables features that are confusing or poorly thought out.
+
+```JS
+// Non-strict code...
+ 
+(function(){
+  "use strict";
+ 
+  // Define your library strictly...
+})();
+ 
+// Non-strict code...
+```
+
+### Development Effects:
+
+- will not allow to declare a variable without 'var' keyword
+- Any attempts to write to a property whose writable attribute is set to false, delete a property whose configurable attribute is set to false, or add a property to an object whose extensible attribute is set to false will result in an error 
+- Deleting a variable, a function, or an argument will result in an error
+- Defining a property more than once in an object literal will cause an exception to be thrown
+- any attempts to use the name `eval` is not allowed
+- Additionally, attempts to introduce new variables through an eval will be blocked
+- arguments object cannot be overriden in this mode
+- Identically named arguments result in an error
+- arguments.caller/ arguments.callee cannot be used
+- strict mode prevents null or undefined to be coerced to a global object
+```JS
+(function(){ ... }).call( null ); //gives exception
+```
+
+- use of with statements is prohibited
+- inside an IIFE this will be undefined in strict mode
+- variable definition mapping to variable name is faster in strict mode
+- Sixth, strict mode in ECMAScript 5 forbids octal syntax.
+- Strict mode does not allow to set properties on primitive values
+
+
+```JS
+'use strict';
+if (true) {
+  function f() { } // !!! syntax error
+  f();
+}
+
+for (var i = 0; i < 5; i++) {
+  function f2() { } // !!! syntax error
+  f2();
+}
+
+function baz() { // kosher
+  function eit() { } // also kosher
+}
+```
+
+
+### Performance Effects:
+
+Strict mode simplifies how variable names map to particular variable definitions in the code. Many compiler optimizations rely on the ability to say that variable X is stored in that location: this is critical to fully optimizing JavaScript code. JavaScript sometimes makes this basic mapping of name to variable definition in the code impossible to perform until runtime. Strict mode removes most cases where this happens, so the compiler can better optimize strict mode code.
+
+### Future versions:
+
+ in strict mode a short list of identifiers become reserved keywords. These words are implements, interface, let, package, private, protected, public, static, and yield. In strict mode, then, you can't name or use variables or arguments with these names.
 
 
