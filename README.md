@@ -7,6 +7,14 @@ Technologies covered
 - HTML
 - CSS
 
+References:
+
+- My personal experience
+- [Reference1](https://github.com/h5bp/Front-end-Developer-Interview-Questions)
+- [Reference2](https://www.codementor.io/angularjs/tutorial/angularjs-interview-questions-sample-answers)
+- [Reference3]()
+
+
 ## Javascript
  
 - [What all design patterns do you know? Which should be used at what instance?](#design-patterns)
@@ -21,7 +29,10 @@ Technologies covered
 - Observer
 - Singleton
 
-#### Module
+#### Module Design Pattern
+
+- [Reference1](https://scotch.io/bar-talk/4-javascript-design-patterns-you-should-know)
+- [Reference2](https://toddmotto.com/mastering-the-module-pattern/)
 
 *Advantages*:
 
@@ -161,7 +172,10 @@ console.log(Module.publicMethod('hello'));
 Adding an `_` infront of a method name is a good practice to distinguish a private method from a public method
 
 
-#### Prototype
+#### Prototype Design Pattern
+
+- [Reference1](https://scotch.io/bar-talk/4-javascript-design-patterns-you-should-know)
+- [Reference2](https://addyosmani.com/resources/essentialjsdesignpatterns/book/)
 
 *Advantages*:
 
@@ -197,6 +211,107 @@ Person.prototype = (function(){
 }());
 ```
 
+```JS
+//global object to be used
+var vehicle = {
+	init: function(model){
+		this.model = model;
+	},
+	getModel: function(){
+		return this.model;
+	}
+};
+//module returning a prototype
+var hello = (function(){
+
+	function F(){};
+
+	return function(proto){
+		F.prototype = proto;
+		return new F();
+	}
+
+})();
+
+//using global object and module together to make a new object
+var car = hello(vehicle);
+car.init('maruti');
+```
+
+
+#### Observer Design Pattern
+
+- [Reference1](https://scotch.io/bar-talk/4-javascript-design-patterns-you-should-know)
+- [Reference2](https://addyosmani.com/resources/essentialjsdesignpatterns/book/)
+
+If an object is modified, it broadcasts to the dependent objects that a change has occured.
+
+*Disadvantage*
+
+Significant drop in performance as the number of observers increase
+
+In AngularJS, we can watch variables, functions, and objects. The $$digest cycle runs and notifies each of the watchers with the new values whenever a scope object is modified.
+
+Doing the same in javascript:
+
+```JS
+var Subject = function() {
+  this.observers = [];
+
+  	return {
+	    subscribeObserver: function(observer) {
+	      this.observers.push(observer);
+	    },
+	    unsubscribeObserver: function(observer) {
+	      var index = this.observers.indexOf(observer);
+	      if(index > -1) {
+	        this.observers.splice(index, 1);
+	      }
+	    },
+	    notifyObserver: function(observer) {
+	      var index = this.observers.indexOf(observer);
+	      if(index > -1) {
+	        this.observers[index].notify(index);
+	      }
+	    },
+	    notifyAllObservers: function() {
+	      for(var i = 0; i < this.observers.length; i++){
+	        this.observers[i].notify(i);
+	      };
+	    }
+  	};
+};
+
+var Observer = function() {
+  	return {
+    	notify: function(index) {
+      		console.log("Observer " + index + " is notified!");
+    	}
+  	}
+}
+
+var subject = new Subject();
+
+var observer1 = new Observer();
+var observer2 = new Observer();
+var observer3 = new Observer();
+var observer4 = new Observer();
+
+subject.subscribeObserver(observer1);
+subject.subscribeObserver(observer2);
+subject.subscribeObserver(observer3);
+subject.subscribeObserver(observer4);
+
+subject.notifyObserver(observer2); // Observer 2 is notified!
+
+subject.notifyAllObservers(); 
+```
+
+#### Singleton Pattern
+
+- [Reference1](https://scotch.io/bar-talk/4-javascript-design-patterns-you-should-know)
+- [Reference2](https://addyosmani.com/resources/essentialjsdesignpatterns/book/)
+- [Reference3](http://robdodson.me/javascript-design-patterns-singleton/)
 
 
 
