@@ -23,6 +23,12 @@ References:
 - [Make a simple counter using a single function and a local variable using closures](#simple-counter-function)
 - [Devise a solution in which an object can be made using a constructor function without adding `new` when calling the constructor function and assigning to the object?](#making-objects-using-constructor-function-without-newing)
 
+## AngularJS
+
+- [What is the difference between $scope.$apply and $scope.$$digest](#apply-and-digest-in-angular)
+
+
+
 ## Design Patterns
 
 - Module
@@ -828,3 +834,43 @@ var b = Person();
 
 console.log(b);
 ```
+
+<hr>
+
+## Apply And Digest In Angular
+
+- [Reference1](https://www.sitepoint.com/understanding-angulars-apply-digest/)
+- [Reference2](http://stackoverflow.com/questions/35826219/angular-scope-digest-vs-scope-apply)
+
+$scope.$digest() will fire watchers on the current scope, and on all of its children, too. 
+$scope.$apply will evaluate passed function and run $rootScope.$digest() which will then run watchers on the entire scope object atleast twice and at max 10 times
+
+When an error occurs in one of the watchers and you use scope.$digest, it's not handled via $exceptionHandler service, so you need to handle exception yourself. scope.$apply uses a try-catch block internally and passes all exceptions to $exceptionHandler.
+
+
+```JS
+angular.module("myApp", [])
+.controller("myController", function($scope){
+
+    setTimeout(function(){
+        $scope.name = "rahul";
+        $scope.$digest();
+    }, 1000);
+
+});
+```
+
+```JS
+angular.module("myApp", [])
+.controller("myController", function($scope){
+
+    setTimeout(function(){
+        $scope.$apply(function(){
+            $scope.name = "rahul";    
+        });
+    }, 1000);
+
+});
+```
+
+
