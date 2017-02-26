@@ -32,6 +32,7 @@ References:
 - [What are the various scope options available while making directives. Explain each of them in detail?](#scope-options-in-directives)
 - [What are the ways to optimize an AngularJS application](#optimising-your-angular-app)
 - [What is the difference between adding $scope and scope in link function in a directive]()
+- [Using $cacheFactory]()
 
 
 
@@ -1017,5 +1018,28 @@ In isolated scope we can pluck holes using this
 ```
 
 
-## Optimizing Your Angular Apps
+## Optimising Your Angular Apps
+
+- [Reference1](https://medium.com/developers-writing/tips-and-practices-to-optimize-your-angularjs-app-8118550ff808#.z7h35p48k)
+- [Reference2](https://toddmotto.com/use-controller-filters-to-prevent-digest-performance-issues/)
+- [Reference3]() 
+
+AngularJS is a magic framework. Using it well will drastically improve your productivity, code modularity and reusability. Using it badly, instead, will probably end up creating messy code and a very slow application.
+
+Some of the ways to optimize AngularJS applications are listed below:
+
+- Avoid watchers
+- Avoid $broadcast When you broadcast an event, indeed, the digest cycle goes through the scope hierarchy each time.
+- Use trackby in ng-repeat. Angular does not have to rebuild an element which has already been rendered. This speeds up the cycle and avoids useless DOM manipulation.
+- Use less built-in directives
+- Filters are something to also be avoided as much as possible when using within a loop.
+There are roughly 5 filter calls every digest loop. Imagine in an ng-repeat with 1000 items, the number of filter calls. Use $filter method inside controller instead where it is specifically required.
+- '{{:: myExpression }}' can be used to bind the expression one time to the view
+- If the elements to be toggle is inside a long list, where maybe expressions get re-calculated when the scope changes, you may want to have the node removed from the DOM to avoid useless calculation. However, when often toggling an element’s visibility (a loading spinner? A button?) and is not tied to a scope, ng-show/hide might be better off.
+- ControllerAs Syntax can be used to organize our controller in a much better way
+- use private methods, and expose to your scope only the things that are needed within your templates.
+- when you need to only check the current scope (and children), you are better off using scope.$digest() than scope.$apply() as the latter will dirty-check the whole scope(internally, it runs $rootScope.digest())!
+This is quite common inside directives that use, for instance, JQuery events:
+- Use $cacheFactory to cache your data
+- Use proper tools for debugging - ngInspector/Batarang
  
