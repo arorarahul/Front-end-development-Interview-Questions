@@ -27,6 +27,12 @@ References:
 
 - [What is the difference between $scope.$apply and $scope.$$digest](#apply-and-digest-in-angular)
 - [What are the different methods to do directive to directive communication in AngularJS](#directive-to-directive-communication)
+- [What is the difference between transclude and replace in directives in AngularJS](#transclude-and-replace)
+- [What is the difference between compile and link?](#compile-and-link)
+- [What are the various scope options available while making directives. Explain each of them in detail?](#scope-options-in-directives)
+- [What are the ways to optimize an AngularJS application](#optimising-your-angular-app)
+- [What is the difference between adding $scope and scope in link function in a directive]()
+
 
 
 
@@ -876,5 +882,140 @@ angular.module("myApp", [])
 
 ## Directive To Directive Communication
 
+- [Reference1](https://toddmotto.com/directive-to-directive-communication-with-require/)
+- [Reference2](http://stackoverflow.com/questions/20930592/whats-the-meaning-of-require-ngmodel)
+
+Directive to directive communication can be effectively done using `require` when communicating between parent and child functionality.
+
+`require` requires the controller functionality of the parent directive which can be accessed in the link function using $ctrl
+
+Note: `require` takes the directive name whose controller functionality it wants to access
+
+Due to the Angular’s compiling procedure, the controller is instantiated first, then the link function once the Directive has been compiled and linked.
+Basically, the controller of one directive can be used as an API for other directives to interact with that directive
+
+Here is the same code that uses require
 
 
+```JS
+angular.module("myApp", [])
+.directive('tabs', function(){
+    return {
+        restrict: "E",
+        scope: {},
+        transclude: true,
+        controller: function(){
+            this.tabs = [];
+
+            this.addTab = function(tab){
+                this.tabs.push(tab);
+            }
+
+            this.selectTab = function(index){
+                for(var i=0; i<this.tabs.length;i++){
+                    this.tabs[i].selected = false;
+                }
+                this.tabs[index].selected = true;
+            }
+        },
+        link: function($scope, $element, $attrs, $ctrl){
+            $ctrl.selectTab($attrs.active || 0);
+        },
+        controllerAs: 'tabs',
+        template: `
+              <div class="tabs">
+                <ul class="tabs__list">
+                    <li ng-repeat="tab in tabs.tabs">
+                        <a href="" ng-bind="tab.label" ng-click="tabs.selectTab($index);"></a>
+                    </li>
+                </ul>
+                <div class="tabs__content" ng-transclude></div>
+              </div>
+            `
+    };
+})
+.directive('tab',function(){
+    return{
+        restrict: 'E',
+        scope: {
+            label: '@'
+        },
+        require: '^tabs',
+        transclude: true,
+        template: `
+          <div class="tabs__content" ng-if="tab.selected">
+                <div ng-transclude></div>
+          </div>
+        `,
+        link: function($scope, $element, $attrs, $ctrl){
+            
+            $scope.tab = {
+                label: $scope.label,
+                selected: false
+            }
+
+            $ctrl.addTab($scope.tab);
+        }
+
+    }
+})
+```
+
+
+## Transclude And Replace
+
+COMING SOON
+
+
+## Compile And Link
+
+- [Reference1](http://stackoverflow.com/questions/12164138/what-is-the-difference-between-compile-and-link-function-in-angularjs)
+- [Reference2](http://stackoverflow.com/questions/12546945/difference-between-the-controller-link-and-compile-functions-when-definin)
+- [Reference3](https://www.youtube.com/watch?v=WqmeI5fZcho)
+
+
+- compile function:  used for template DOM manipulation (i.e., manipulation of tElement = template element), hence manipulations that apply to all DOM clones of the template associated with the directive. (If you also need a link function (or pre and post link functions), and you defined a compile function, the compile function must return the link function(s) because the 'link' attribute is ignored if the 'compile' attribute is defined.). It takes elem, attrs as arguments
+
+- link function: normally use for registering listener callbacks (i.e., $watch expressions on the scope) as well as updating the DOM (i.e., manipulation of iElement = individual instance element). It is executed after the template has been cloned. E.g., inside an <li ng-repeat...>, the link function is executed after the <li> template (tElement) has been cloned (into an iElement) for that particular <li> element. A $watch allows a directive to be notified of scope property changes (a scope is associated with each instance), which allows the directive to render an updated instance value to the DOM.
+
+- controller function - must be used when another directive needs to interact with this directive. E.g., on the AngularJS home page, the pane directive needs to add itself to the scope maintained by the tabs directive, hence the tabs directive needs to define a controller method (think API) that the pane directive can access/call. 
+
+In general, you can put methods, $watches, etc. into either the directive's controller or link function. The controller will run first, which sometimes matters. You may want to put scope-manipulation functions inside a controller just for consistency with the rest of the framework.
+
+`Compile function runs only once for all the instances of a directive. Link function will run once for each instance of the directive. Therefore DOM manipulation done in compile will reflect in all the instances of the directive`
+
+
+## Scope Options In Directives
+
+- [Reference1](https://www.undefinednull.com/2014/02/11/mastering-the-scope-of-a-directive-in-angularjs/)
+- [Reference2](https://www.3pillarglobal.com/insights/angularjs-understanding-directive-scope)
+- [Reference3](http://blogs.quovantis.com/scope-in-custom-directives-angularjs/)
+
+By default, unless explicitly set, directives don’t create their own scope. Therefore, directives use their parent scope ( usually a controller ) as their own.
+
+
+- **scope: false**
+
+In this case the directive will use its parent scope i.e whatever template call the directive, the scope bound to the controller of that template will be used by the directive.
+This scope is two way binded. Any changes made to the scope in the directive will be reflected back in the controller as well
+
+- **scope: true**
+
+AngularJS will create a new scope by inheriting parent scope ( usually controller scope, otherwise the application’s rootScope ). Any changes made to this new scope will not reflect back to the parent scope. 
+However, since the new scope is inherited from the parent scope, any changes made in the Ctrl1 ( the parent scope ) will be reflected in the directive scope.
+
+- **scope: {}**
+
+Directive will get a new isolated scope.This time, there will be a new scope created for the directive, but it will not be inherited from the parent scope. This new scope also known as Isolated scope because it is completely detached from its parent scope.
+
+In isolated scope we can pluck holes using this
+
+```
+‘@’ – Text binding / one-way binding
+‘=’ – Direct model binding / two-way binding
+‘&’ – Behavior binding / Method binding
+```
+
+
+## Optimizing Your Angular Apps
+ 
