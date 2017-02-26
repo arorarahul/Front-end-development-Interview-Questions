@@ -26,6 +26,7 @@ References:
 ## AngularJS
 
 - [What is the difference between $scope.$apply and $scope.$$digest](#apply-and-digest-in-angular)
+- [What are the different methods to do directive to directive communication in AngularJS](#directive-to-directive-communication)
 
 
 
@@ -872,5 +873,8 @@ angular.module("myApp", [])
 
 });
 ```
+
+## Directive To Directive Communication
+
 
 
