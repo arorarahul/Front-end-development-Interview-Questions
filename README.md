@@ -32,7 +32,12 @@ References:
 - [What are the various scope options available while making directives. Explain each of them in detail?](#scope-options-in-directives)
 - [What are the ways to optimize an AngularJS application](#optimising-your-angular-app)
 - [What is the difference between adding $scope and scope in link function in a directive]()
+- [What is the difference between service, provider and factory](#service-provider-and-factory)
+- [What is the difference between config and run in AngularJS]($config-and-run)
+- [When to use a directive over a component](#components-vs-directives)
+- [What is the key difference between Angular 1.x and Angular2](#angular1.x-vs-angular2)
 - [Using $cacheFactory]()
+
 
 
 
@@ -1042,4 +1047,157 @@ There are roughly 5 filter calls every digest loop. Imagine in an ng-repeat with
 This is quite common inside directives that use, for instance, JQuery events:
 - Use $cacheFactory to cache your data
 - Use proper tools for debugging - ngInspector/Batarang
- 
+
+
+## Service Provider And Factory
+
+- [Reference1](http://www.simplygoodcode.com/2015/11/the-difference-between-service-provider-and-factory-in-angularjs/)
+- [Reference2](http://stackoverflow.com/questions/18939709/angularjs-when-to-use-service-instead-of-factory)
+
+They are all providers. The factory and the service are just special cases of the provider, but you can accomplish everything you want using just provider.
+
+Note that angular only “gets” the value once, no matter how many times the provider is injected. That means it calls $get() only once ever, stores the value provided by $get(), and gives you that same stored value every time.
+
+```JS
+var mod = angular.module("MyModule", []);
+
+mod.provider("myProvider", function() {
+    this.$get = function() {
+        return "My Value";
+    };
+});
+
+mod.controller("MyController", function(myProvider) {
+    console.log("MyController - myProvider: " + myProvider);
+});
+```
+
+Code for a factory:
+
+```JS
+mod.factory("myProvider", function() { // CHANGED “provider" to “factory"
+    console.log("Factory function called.");
+    return "My Value";
+});
+
+mod.controller("MyController", function(myProvider) {
+    console.log("MyController - myProvider: " + myProvider);
+});
+
+mod.controller("MyController2", function(myProvider) {
+    console.log("MyController2 - myProvider: " + myProvider);
+});
+```
+
+
+Provider, factory, and service are all providers. A factory is a special case of a provider when all you need in your provider is a $get() function. It allows you to write it with less code. A service is a special case of a factory when you want to return an instance of a new object, with the same benefit of writing less code. Service function is nothing but a contructor function that returns new instance of an object but it cannot take arguments. Factory instead can `new` a function to return an object from a function constructor to which arguments can be passed.
+
+
+### When to use one over the other?
+
+Say for example you are returning an existing object defined somewhere else that takes constructor arguments. You can’t pass arguments to the service, so you would make the call with a factory instead.
+
+```JS
+mod.factory("myProvider", function() {
+    console.log("Factory function called.");
+    return new SomeMessageBoxClass("custom argument");
+});
+```
+
+One of the main factors of deciding between a provider and factory is whether you want to be able to configure the object that is generated before it’s generated. You do this by calling module.config() and getting an instance to the provider itself (instead of the object returned by the provider). You do this by appending “Provider” to the end of your provider’s name when you are injecting it.
+
+Example:
+
+```JS
+mod.provider("myProvider", function() {
+    this.value = "My Value";
+
+    this.setValue = function(newValue) {
+        this.value = newValue;
+    };
+
+    this.$get = function() {
+        return this.value;
+    };
+});
+
+mod.controller("MyController", function(myProvider) {
+    console.log("MyController - myProvider: " + myProvider);
+});
+
+mod.config(function(myProviderProvider) { // ADDED config section
+    // Note the extra "Provider" suffix
+    myProviderProvider.setValue("New Value");
+});
+```
+
+There is another provider called the 'value' provider. If we just want to return a string, we can simply do it as:
+
+```JS
+mod.value("myProvider", "My Value");
+```
+
+So when would you use one versus the other? Presumably you would use the factory provider when you want to calculate the value based on some other data, for example data from another value provider or an external source. And/or when you want to calculate the value if and only when it’s first requested. Here are some examples:
+
+```JS
+// Example where factory depends on a "value" provider
+mod.value("multiple", 3);
+mod.factory("value", function(multiple) { 
+    return 10 * multiple; 
+});
+// Example where factory depends on external data
+mod.factory("value", function(multiple) { 
+    var multiple = getDateFromExternalPage();
+    return 10 * multiple; 
+});
+```
+There is another provider called constant.
+
+Constant is available from the configuration phase and value is not. The other difference is as the name implies you can’t change the value of a constant. The first value you assign it is the value it keeps, if you try to assign it a different value later it will be ignored.
+
+
+## Config And Run
+
+**Configuration Block**
+
+This block is executed during the provider registration and configuration phase. We can have these as many as we want in the application. Only providers and constants can be injected into configuration blocks and not instances. This block is used to inject module wise configuration settings to prevent accidental instantiation of services before they have been fully configured. This block is created using config() method.
+
+Configuration blocks (registered with module.config()) get executed during provider registration, and can only be injected providers and constants (see module.provider() and module.constant()). This is typically where you would configure application-wide stuff, such as the $routeProvider. Stuff that needs to be configured before the services are created.
+
+**Run Block**
+
+This is executed after the execution of configuration block. It inserts instances and constants but not providers. This block is created using run() method. This is similar to main method in C# or Java
+
+You can have multiple of either, and they are executed in the order they were registered to the module. Some people prefer to register a configuration block before every group of controllers to register the routes to these controller, for example.
+
+## Components Vs Directives
+
+- [Reference1](http://stackoverflow.com/questions/38342664/angular-1-5-directives-vs-components)
+
+**Advantages of Components:**
+
+simpler configuration than plain directives
+promote sane defaults and best practices
+optimized for component-based architecture
+writing component directives will make it easier to upgrade to Angular 2
+
+**When not to use Components:**
+
+for directives that rely on DOM manipulation, adding event listeners etc, because the compile and link functions are unavailable
+when you need advanced directive definition options like priority, terminal, multi-element
+when you want a directive that is triggered by an attribute or CSS class, rather than an element
+
+## Angular1.x Vs Angular2
+
+- [Reference1](https://www.quora.com/What-is-the-difference-between-AngularJs-and-Angular-2)
+
+
+- With Angular 2, you can compile to native mobile code with NativeScript, deploy to mobile with Ionic and use Electron for desktop. Single codebase.
+
+Performance improved in Angular 2.0 as compared to Angular 1.x. Bootstrap is now platform specific in angular 2.o. So if application is bootstrap from browser it will call different bootstrap as compare to mobile app. So for browser bootstrap package:angular2/platform/browser.dart is used.
+
+For mobile loading Apache Cordova can be used to reduce loading time.
+
+- Angular 2 is not using $scope anymore to glue view and controller. This is one of the biggest problem when you did coding in Angular 1 and then want to try Angular 2 for the project. However if anyone is coming from JAVA, .NET/ background can easily pick up because syntax are more similar to Java.
+
+-
