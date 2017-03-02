@@ -735,7 +735,8 @@ function baz() { // kosher
 
 ### Performance Effects:
 
-Strict mode simplifies how variable names map to particular variable definitions in the code. Many compiler optimizations rely on the ability to say that variable X is stored in that location: this is critical to fully optimizing JavaScript code. JavaScript sometimes makes this basic mapping of name to variable definition in the code impossible to perform until runtime. Strict mode removes most cases where this happens, so the compiler can better optimize strict mode code.
+Strict mode simplifies how variable names map to particular variable definitions in the code. Many compiler optimizations rely on the ability to say that variable X is stored in that location: this is critical to fully 
+JavaScript code. JavaScript sometimes makes this basic mapping of name to variable definition in the code impossible to perform until runtime. Strict mode removes most cases where this happens, so the compiler can better optimize strict mode code.
 
 ### Future versions:
 
@@ -1023,7 +1024,8 @@ In isolated scope we can pluck holes using this
 ```
 
 
-## Optimising Your Angular Apps
+## Optimising Your Angular App
+
 
 - [Reference1](https://medium.com/developers-writing/tips-and-practices-to-optimize-your-angularjs-app-8118550ff808#.z7h35p48k)
 - [Reference2](https://toddmotto.com/use-controller-filters-to-prevent-digest-performance-issues/)
