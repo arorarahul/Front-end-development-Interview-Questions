@@ -36,6 +36,7 @@ References:
 - [What is the difference between config and run in AngularJS]($config-and-run)
 - [When to use a directive over a component](#components-vs-directives)
 - [What is the key difference between Angular 1.x and Angular2](#angular1.x-vs-angular2)
+- [What is the difference between $emit and $broadcast](#emit-and-broadcast)
 - [Using $cacheFactory]()
 
 
@@ -850,6 +851,10 @@ console.log(b);
 ```
 
 <hr>
+
+## Emit and Broadcast
+
+- [Reference1](https://stackoverflow.com/questions/26752030/rootscope-broadcast-vs-scope-emit)
 
 ## Apply And Digest In Angular
 
